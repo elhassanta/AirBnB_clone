@@ -4,6 +4,7 @@ this is the console to execut the commands
 """
 import cmd
 import json
+import re
 
 
 class Prompt(cmd.Cmd):
@@ -33,6 +34,42 @@ class Prompt(cmd.Cmd):
         If the line is empty do nothing
         """
         pass
+    def do_all(self, line):
+        """
+        Shows the string representation of all objects existing
+        """
+        pass
+    
+    def do_update(self, line):
+        """
+        updates an instance
+        """
+        pass
+
+    def do_count(self, line):
+        """
+        counts the number of instances
+        """
+        pass
+    
+    def do_create(self, line):
+        """
+        Creates a new instance
+        """
+        pass
+    
+    def do_destroy(self, line):
+        """
+        Destroy an exist instance
+        """
+        pass
+
+    def do_show(self, line):
+        """
+        Shows the the representation of an instance
+        """
+        pass
+
 
 
 if __name__ == "__main__":
