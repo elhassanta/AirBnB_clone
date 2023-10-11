@@ -17,7 +17,7 @@ class Prompt(cmd.Cmd):
         """
         overwrite the method default
         """
-        pass
+        print('this is the default method')
 
     def do_EOF(self, line):
         """
@@ -36,42 +36,42 @@ class Prompt(cmd.Cmd):
         If the line is empty do nothing
         """
         pass
+
     def do_all(self, line):
         """
         Shows the string representation of all objects existing
         """
-        pass
-    
+        print("the all command")
+
     def do_update(self, line):
         """
         updates an instance
         """
-        pass
+        print("the update command: " + line)
 
     def do_count(self, line):
         """
         counts the number of instances
         """
-        pass
-    
+        print("the count command: " + line)
+
     def do_create(self, line):
         """
         Creates a new instance
         """
-        pass
-    
+        print("the create command: " + line)
+
     def do_destroy(self, line):
         """
         Destroy an exist instance
         """
-        pass
+        print("the destroy command: " + line)
 
     def do_show(self, line):
         """
         Shows the the representation of an instance
         """
-        pass
-
+        print("the display command: " + line)
 
 
 if __name__ == "__main__":
