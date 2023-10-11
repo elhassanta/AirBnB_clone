@@ -23,11 +23,13 @@ class Prompt(cmd.Cmd):
         Handles the end of the file character.
         """
         return True
+
     def do_quit(self, line):
         """
         Handles the command quit to exit
         """
         return True
+
     def emptyline(self):
         """
         If the line is empty do nothing
