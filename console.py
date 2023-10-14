@@ -1,13 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 this is the console to execut the commands
 """
 import cmd
 import json
 import re
+from models.base_model import BaseModl
 
 
-class Prompt(cmd.Cmd):
+class HBNBCommand(cmd.Cmd):
     """
     The class to make the console
     """
@@ -26,8 +27,7 @@ class Prompt(cmd.Cmd):
         return True
 
     def do_quit(self, line):
-        """
-        Handles the command quit to exit
+        """Quit command to exit the program
         """
         return True
 
@@ -75,4 +75,4 @@ class Prompt(cmd.Cmd):
 
 
 if __name__ == "__main__":
-    Prompt().cmdloop()
+    HBNBCommand().cmdloop()

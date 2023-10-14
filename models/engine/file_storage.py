@@ -28,8 +28,8 @@ class FileStorage:
         """
         Set at __objects the new objects that was created
         """
-        oc_name = obj.__class__.__name__
-        FileStorage.__objects["{}.{}".format(oc_name, obj.id)] = obj
+        obj_class_name = obj.__class__.__name__
+        FileStorage.__objects["{}.{}".format(obj_class_name, obj.id)] = obj
 
     def save(self):
         """
