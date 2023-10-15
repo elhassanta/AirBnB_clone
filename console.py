@@ -19,7 +19,7 @@ def parse(line):
     brackets = re.search(r"\[(.*?)\]", line)
     if cur_braces is None:
         if brackets is None:
-            return [i.strip(",") for i in line]
+            return [i.strip(",") for i in split(line)]
         else:
             lexer = split(line[:brackets.span()[0]])
             c_cmd = [i.strip(",") for i in lexer]
@@ -27,7 +27,6 @@ def parse(line):
             return c_cmd
     else:
         lexer = split(line[:cur_braces.span()[0]])
-        print(lexer)
         c_cmd = [i.strip(",") for i in lexer]
         c_cmd.append(cur_braces.group())
         return c_cmd
@@ -75,6 +74,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Handles the end of the file character.
         """
+        print()
         return True
 
     def do_quit(self, line):
@@ -92,51 +92,120 @@ class HBNBCommand(cmd.Cmd):
         """
         Shows the string representation of all objects existing
         """
-        print("the all command")
+        l_line = parse(line)
+        if len(l_line) > 0 and l_line[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+        else:
+            l_objs = []
+            for obj in storage.all().values():
+                if len(l_line) > 0 and l_line[0] == obj.__class__.__name__:
+                    l_objs.append(obj.__str__())
+                elif len(l_line) == 0:
+                    l_objs.append(obj.__str__())
+            print(l_objs)
 
     def do_update(self, line):
         """
         updates an instance
         """
-        print("the update command: " + line)
+        l_line = parse(line)
+        obj_dict = storage.all()
+
+        if len(l_line) == 0:
+            print("** class name missing **")
+            return False
+        if l_line[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+            return False
+        if "{}.{}".format(l_line[0], l_line[1]) not in obj_dict:
+            print("** no instance found **")
+            return False
+        if len(l_line) == 2:
+            print("** attribute name missing **")
+            return False
+        if len(l_line) == 3:
+            try:
+                type(eval(l_line[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return False
+        if len(l_line) == 4:
+            obj = obj_dict["{}.{}".format(l_line[0], l_line[1])]
+            if l_line[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[l_line[3]])
+                obj.__dict__[l_line[2]] = valtype(l_line[3])
+        elif type(eval(l_line[2])) == dict:
+            obj = obj_dict["{}.{}".format(l_line[0], l_line[1])]
+            for k, v in eval(l_line[0], l_line[1]).items():
+                if (k in obj.__class__.__dic__.keys()
+                        and type(obj.__class__.__dict__[k])
+                        in {str, float, int}):
+                    valtype = type(obj.__class__.__dict__[k])
+                    obj.__dict__[k] = valtype(v)
+                else:
+                    obj.__dict__[k] = v
+        storage.save()
 
     def do_count(self, line):
         """
         counts the number of instances
         """
-        print("the count command: " + line)
+        l_line = parse(line)
+        count = 0
+        obj_list = storage.all().values()
+        for obj in obj_list:
+            if l_line == obj.__class__.__name__:
+                count += 1
+        print(count)
 
     def do_create(self, line):
         """
         Creates a new instance
         """
         l_line = parse(line)
-        print(l_line)
         obj_dict = storage.all()
         if len(l_line) == 0:
             print("** class name missing **")
         elif l_line[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
-        elif len(l_line) == 1:
-            print("** instance id missing **")
-        elif "{}.{}".format(l_line[0], l_line[1]) not in  obj_dict:
-            print("** no instance found **")
         else:
-            print(obj_dict["{}.{}".format(l_line[0], l_line[1])])
-        print("the create command: " + line)
+            print(eval(l_line[0])().id)
+            storage.save()
 
     def do_destroy(self, line):
         """
         Destroy an exist instance
         """
         l_line = parse(line)
-        print("the destroy command: " + line)
+        obj_dict = storage.all()
+        if len(l_line) == 0:
+            print("** class name missing **")
+        elif l_line[0] not in HBNBCommand._classes:
+            print("** class doesn't exist **")
+        elif len(l_line) == 1:
+            print("** instance id missing **")
+        elif "{}.{}".format(l_line[0], l_line[1]) not in obj_dict:
+            print("** no instance found **")
+        else:
+            del obj_dict["{}.{}".format(l_line[0], l_line[1])]
+            storage.saev()
 
     def do_show(self, line):
         """
         Shows the the representation of an instance
         """
-        print("the display command: " + line)
+        l_line = parse(line)
+        obj_dict = storage.all()
+        if len(l_line) == 0:
+            print("** class doesn't exist **")
+        elif l_line[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+        elif len(l_line) == 1:
+            print("** instance id missing **")
+        elif "{}.{}".format(l_line[0], l_line[1]) not in obj_dict:
+            print("** no instance found **")
+        else:
+            print(obj_dict["{}.{}".format(l_line[0], l_line[1])])
 
 
 if __name__ == "__main__":
