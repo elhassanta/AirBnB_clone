@@ -212,5 +212,4 @@ if __name__ == "__main__":
     if sys.stdin.isatty():
         HBNBCommand().cmdloop()
     else:
-        HBNBCommand().cmdloop()
         print()
